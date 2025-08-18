@@ -8,8 +8,12 @@ def train_model(encoded_train_data, target, model_name, params, seed=None):
 
     model_class = get_algorithm_class(model_name)
 
+    # logger.info("Training {} model".format(model_name))
+    # clf = model_class(random_state=seed, **params)
     logger.info("Training {} model".format(model_name))
-    clf = model_class(random_state=seed, **params)
+    _safe = dict(params or {})
+    _safe.pop("normalize", None)  # remove parâmetro depreciado no sklearn>=1.2
+    clf = model_class(random_state=seed, **_safe)
 
     trained_model = clf.fit(encoded_train_data, target)
     return trained_model
